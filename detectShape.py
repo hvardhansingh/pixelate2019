@@ -28,7 +28,6 @@ def detect(mask,shape):
         cv2.drawContours(img, [approx], -1, (0, 255, 0), 2)
         cv2.putText(img,str(i),(cX,cY),cv2.FONT_HERSHEY_SIMPLEX,0.5,(0, 0, 0),2)
         i=i+1;
-
         if len(approx)==3 and shape=="TRIANGLE":
             print("TRIANGLE : ",cX," ",cY)
             r = int(cY/divRow)                          # to find position of the particular shape in nxn grid
@@ -40,7 +39,7 @@ def detect(mask,shape):
             r = int(cY/divRow)
             c = int(cX/divCol)
             imgMat[r,c]=1
-        elif shape=="CIRCLE":
+        elif len(approx)>4 and shape=="CIRCLE":
             print("CIRCLE : ",cX," ",cY)
             r = int(cY/divRow)
             c = int(cX/divCol)
