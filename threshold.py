@@ -1,13 +1,13 @@
 import numpy as np
 import cv2
-t = 10           #  correction term for min and max values
+t = 25           #  correction term for min and max values
 
 '''
-mat is a 3x2 matrix containing min and max LAB values for thresholding.
+mat is a 3x2 matrix containing min and max RGB values for thresholding.
 '''
 def start(crop_img):        
     mat = np.zeros([3,2])   
-    lab = cv2.cvtColor(crop_img, cv2.COLOR_BGR2LAB)
+    lab = crop_img #cv2.cvtColor(crop_img, cv2.COLOR_BGR2HSV)
     r = cv2.selectROI('img',crop_img,False)                 
     imCrop = lab[int(r[1]):int(r[1]+r[3]), int(r[0]):int(r[0]+r[2])]
     
@@ -20,9 +20,9 @@ def start(crop_img):
 << THRESHOLDING >>
 '''
 def roi(crop_img,mat):
-    lab = cv2.cvtColor(crop_img, cv2.COLOR_BGR2LAB)
+    lab = crop_img                          #cv2.cvtColor(crop_img, cv2.COLOR_BGR2HSV)
     mask = cv2.inRange(lab,mat[0],mat[1])
-    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3,3))
+    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (4,4))
     dilation = cv2.dilate(mask, kernel, iterations = 1)  
     mask = cv2.erode(dilation, kernel, iterations = 4)
     return mask

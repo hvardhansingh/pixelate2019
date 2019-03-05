@@ -2,25 +2,29 @@ import numpy as np
 import cv2
 import lab_thresh as thresholding
 
-img = cv2.imread('rsz_arena.jpg')
+#img = cv2.imread('rsz_arena.jpg')
 
-n=int(9)                        # no of grids 
+n=int(5)                        # no of grids 
 
-row,col,_ = img.shape
+
 #print(row," ",col)
-divRow = int(row/n)             # height of one row             
-divCol = int(col/n)             # width of one column
+             # height of one row             
+             # width of one column
 
-def detect(mask,shape):
+def detect(img,mask,shape):
 
     '''
     This function will return an nxn matrix containing '1' for shape of selected color, '0' otherwise.
     '''
-    
+    row,col = mask.shape
+    divRow = int(row/n)
+    divCol = int(col/n)
+
     imgMat = np.zeros([n,n])    
     _, contours, _ = cv2.findContours(mask,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
     i=1
     for cnt in contours:
+        #print(cv2.contourArea(cnt))
         approx = cv2.approxPolyDP(cnt, 0.04*cv2.arcLength(cnt, True), True)     # approximating the contours found 
         M = cv2.moments(cnt)
         cX = int(M["m10"]/M["m00"])
@@ -44,6 +48,7 @@ def detect(mask,shape):
             r = int(cY/divRow)
             c = int(cX/divCol)
             imgMat[r,c]=1
+    cv2.imshow('contours', img)
     return imgMat
 
 
